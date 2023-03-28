@@ -1,3 +1,4 @@
+"use strict";
 /**
  * Classes
  */
@@ -16,9 +17,9 @@ class Item {
 }
 
 class StoreInventory {
-  items: Array<Item>;
+  items: Item[];
 
-  constructor(items = [] as Array<Item>) {
+  constructor(items = [] as Item[]) {
     this.items = items;
   }
 
@@ -75,7 +76,7 @@ let items = [
 
 let storeInventory = new StoreInventory(items);
 
-let days: number = 2;
+let days = 10;
 
 for (let i = 0; i < days; i++) {
   console.log("Day " + i + "  ---------------------------------");
