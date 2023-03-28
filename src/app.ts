@@ -3,7 +3,7 @@
  * Classes
  */
 
-class Item {
+class FoodItem {
   name: string;
   sellIn: number;
   quality: number;
@@ -17,13 +17,13 @@ class Item {
 }
 
 class StoreInventory {
-  items: Item[];
+  items: FoodItem[];
 
-  constructor(items = [] as Item[]) {
+  constructor(items = [] as FoodItem[]) {
     this.items = items;
   }
 
-  updateQuality() {
+  updateFoodItemQuality() {
     for (let i = 0; i < this.items.length; i++) {
       if (this.items[i].name != "Cheddar Cheese") {
         // if (this.items[i].sellIn < 3) { # Summer sale promotion
@@ -65,13 +65,13 @@ class StoreInventory {
  */
 
 let items = [
-  new Item("Apple", 10, 10),
-  new Item("Banana", 7, 9),
-  new Item("Strawberry", 5, 10),
-  new Item("Cheddar Cheese", 10, 16),
-  new Item("Instant Ramen", 0, 5),
+  new FoodItem("Apple", 10, 10),
+  new FoodItem("Banana", 7, 9),
+  new FoodItem("Strawberry", 5, 10),
+  new FoodItem("Cheddar Cheese", 10, 16),
+  new FoodItem("Instant Ramen", 0, 5),
   // this Organic item does not work properly yet
-  new Item("Organic Avocado", 5, 16),
+  new FoodItem("Organic Avocado", 5, 16),
 ];
 
 let storeInventory = new StoreInventory(items);
@@ -87,7 +87,7 @@ for (let i = 0; i < days; i++) {
   console.table(data);
 
   console.log();
-  storeInventory.updateQuality();
+  storeInventory.updateFoodItemQuality();
 }
 
 /**
@@ -102,11 +102,11 @@ chai.should();
 chai.use(sinonChai);
 
 try {
-  let testItems = [new Item("test", 10, 10)];
+  let testItems = [new FoodItem("test", 10, 10)];
   let testInventory = new StoreInventory(testItems);
 
   // Decreases quality
-  testInventory.updateQuality();
+  testInventory.updateFoodItemQuality();
   expect(testItems[0].sellIn).to.equal(9);
 
   console.log(`✅ Tests passed!`);
