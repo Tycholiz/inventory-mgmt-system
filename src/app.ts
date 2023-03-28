@@ -101,12 +101,12 @@ chai.should();
 chai.use(sinonChai);
 
 try {
-  let testItmes = [new Item("test", 10, 10)];
-  let testInventory = new StoreInventory(testItmes);
+  let testItems = [new Item("test", 10, 10)];
+  let testInventory = new StoreInventory(testItems);
 
   // Decreases quality
   testInventory.updateQuality();
-  expect(testItmes[0].sellIn).to.equal(9);
+  expect(testItems[0].sellIn).to.equal(9);
 
   console.log(`✅ Tests passed!`);
 } catch (e) {
