@@ -3,8 +3,8 @@ import { FoodItem, StoreInventory } from "./app";
 
 describe("add", () => {
   it("should add two numbers", () => {
-    let testItems = [new FoodItem("test", 10, 10)];
-    let testInventory = new StoreInventory(testItems);
+    const testItems = [new FoodItem("test", 10, 10)];
+    const testInventory = new StoreInventory(testItems);
 
     // Decreases quality
     testInventory.updateFoodItemQuality();

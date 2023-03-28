@@ -63,7 +63,7 @@ export class StoreInventory {
  * Implementation
  */
 
-let items = [
+const items = [
   new FoodItem("Apple", 10, 10),
   new FoodItem("Banana", 7, 9),
   new FoodItem("Strawberry", 5, 10),
@@ -73,14 +73,14 @@ let items = [
   new FoodItem("Organic Avocado", 5, 16),
 ];
 
-let storeInventory = new StoreInventory(items);
+const storeInventory = new StoreInventory(items);
 
-let days = 10;
+const days = 10;
 
 for (let i = 0; i < days; i++) {
   console.log("Day " + i + "  ---------------------------------");
   console.log("                  name      sellIn quality");
-  let data = items.map((element) => {
+  const data = items.map((element) => {
     return [element.name, element.sellIn, element.quality];
   });
   console.table(data);
