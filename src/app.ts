@@ -2,7 +2,7 @@
  * Classes
  */
 
-class Item {
+export class FoodItem {
   name: string;
   sellIn: number;
   quality: number;
@@ -15,14 +15,14 @@ class Item {
   }
 }
 
-class StoreInventory {
-  items: Array<Item>;
+export class StoreInventory {
+  items: FoodItem[];
 
-  constructor(items = [] as Array<Item>) {
+  constructor(items = [] as FoodItem[]) {
     this.items = items;
   }
 
-  updateQuality() {
+  updateFoodItemQuality() {
     for (let i = 0; i < this.items.length; i++) {
       if (this.items[i].name != "Cheddar Cheese") {
         // if (this.items[i].sellIn < 3) { # Summer sale promotion
@@ -63,53 +63,28 @@ class StoreInventory {
  * Implementation
  */
 
-let items = [
-  new Item("Apple", 10, 10),
-  new Item("Banana", 7, 9),
-  new Item("Strawberry", 5, 10),
-  new Item("Cheddar Cheese", 10, 16),
-  new Item("Instant Ramen", 0, 5),
+const items = [
+  new FoodItem("Apple", 10, 10),
+  new FoodItem("Banana", 7, 9),
+  new FoodItem("Strawberry", 5, 10),
+  new FoodItem("Cheddar Cheese", 10, 16),
+  new FoodItem("Instant Ramen", 0, 5),
   // this Organic item does not work properly yet
-  new Item("Organic Avocado", 5, 16),
+  new FoodItem("Organic Avocado", 5, 16),
 ];
 
-let storeInventory = new StoreInventory(items);
+const storeInventory = new StoreInventory(items);
 
-let days: number = 2;
+const DAYS_TO_RUN_REPORT = 10;
 
-for (let i = 0; i < days; i++) {
+for (let i = 0; i < DAYS_TO_RUN_REPORT; i++) {
   console.log("Day " + i + "  ---------------------------------");
   console.log("                  name      sellIn quality");
-  let data = items.map((element) => {
+  const data = items.map((element) => {
     return [element.name, element.sellIn, element.quality];
   });
   console.table(data);
 
   console.log();
-  storeInventory.updateQuality();
-}
-
-/**
- * Unit Tests
- */
-// let chai = require("chai");
-let sinon = require("sinon");
-let sinonChai = require("sinon-chai");
-let expect = chai.expect;
-
-chai.should();
-chai.use(sinonChai);
-
-try {
-  let testItmes = [new Item("test", 10, 10)];
-  let testInventory = new StoreInventory(testItmes);
-
-  // Decreases quality
-  testInventory.updateQuality();
-  expect(testItmes[0].sellIn).to.equal(9);
-
-  console.log(`✅ Tests passed!`);
-} catch (e) {
-  console.warn(`❌ Tests failed`);
-  console.error(e);
+  storeInventory.updateFoodItemQuality();
 }
