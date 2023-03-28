@@ -1,9 +1,8 @@
-"use strict";
 /**
  * Classes
  */
 
-class FoodItem {
+export class FoodItem {
   name: string;
   sellIn: number;
   quality: number;
@@ -16,7 +15,7 @@ class FoodItem {
   }
 }
 
-class StoreInventory {
+export class StoreInventory {
   items: FoodItem[];
 
   constructor(items = [] as FoodItem[]) {
@@ -88,29 +87,4 @@ for (let i = 0; i < days; i++) {
 
   console.log();
   storeInventory.updateFoodItemQuality();
-}
-
-/**
- * Unit Tests
- */
-// let chai = require("chai");
-let sinon = require("sinon");
-let sinonChai = require("sinon-chai");
-let expect = chai.expect;
-
-chai.should();
-chai.use(sinonChai);
-
-try {
-  let testItems = [new FoodItem("test", 10, 10)];
-  let testInventory = new StoreInventory(testItems);
-
-  // Decreases quality
-  testInventory.updateFoodItemQuality();
-  expect(testItems[0].sellIn).to.equal(9);
-
-  console.log(`✅ Tests passed!`);
-} catch (e) {
-  console.warn(`❌ Tests failed`);
-  console.error(e);
 }
