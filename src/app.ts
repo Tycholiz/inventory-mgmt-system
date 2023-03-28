@@ -75,9 +75,9 @@ const items = [
 
 const storeInventory = new StoreInventory(items);
 
-const days = 10;
+const DAYS_TO_RUN_REPORT = 10;
 
-for (let i = 0; i < days; i++) {
+for (let i = 0; i < DAYS_TO_RUN_REPORT; i++) {
   console.log("Day " + i + "  ---------------------------------");
   console.log("                  name      sellIn quality");
   const data = items.map((element) => {
