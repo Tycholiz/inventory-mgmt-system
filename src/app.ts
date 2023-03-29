@@ -17,7 +17,7 @@ type FoodItemName =
 
 export class FoodItem {
   constructor(
-    public name: FoodItemName,
+    private name: FoodItemName,
     /**
      * indicates the remaining number of days that remain before a food item
      * starts to degrade quality at double speed. When value reaches -5, it must
@@ -27,9 +27,9 @@ export class FoodItem {
     /** `quality` must be between 0 and 25, and decreases twice as fast when `sellIn` date is less than 0. Value must be between 0 and 25, inclusive. */
     private quality: number,
     /** indicates a food that retains its quality over time and does not have a `sellIn` date. */
-    public isNonPerishable: boolean = false,
+    private nonPerishable: boolean = false,
     /** indicates a food that retains its quality over time */
-    public improvesWithAge: boolean = false
+    private improvesWithAge: boolean = false
   ) {}
   public increaseQuality() {
     if (this.quality < 25) {
@@ -45,8 +45,12 @@ export class FoodItem {
   }
   public decrementSellIn() {
     if (this.sellIn > -5) {
+      /* quality cannot be less than 5 */
       this.sellIn--;
     }
+  }
+  public getName() {
+    return this.name;
   }
   public getSellInDaysValue() {
     return this.sellIn;
@@ -54,12 +58,18 @@ export class FoodItem {
   public getQualityValue() {
     return this.quality;
   }
+  public isItemNonPerishable() {
+    return this.nonPerishable;
+  }
+  public doesItemImproveWithAge() {
+    return this.improvesWithAge;
+  }
 }
 
 export class StoreInventory {
   constructor(public items: FoodItem[]) {}
 
-  updateFullInventory() {
+  public updateFullInventory() {
     for (const item of this.items) {
       this.updateFoodItem(item);
     }
@@ -68,12 +78,12 @@ export class StoreInventory {
   }
 
   private updateFoodItem(item: FoodItem) {
-    if (item.improvesWithAge) {
+    if (item.doesItemImproveWithAge()) {
       item.increaseQuality();
-    } else if (!item.improvesWithAge && !item.isNonPerishable) {
+    } else if (!item.doesItemImproveWithAge() && !item.isItemNonPerishable()) {
       item.decreaseQuality();
     }
-    if (!item.isNonPerishable) {
+    if (!item.isItemNonPerishable()) {
       /* food is perishable, so decrement sellIn value */
       item.decrementSellIn();
     }
@@ -101,7 +111,7 @@ for (let i = 0; i < DAYS_TO_RUN_REPORT; i++) {
   console.log("                  name      sellIn quality");
   const data = items.map((element) => {
     return [
-      element.name,
+      element.getName(),
       element.getSellInDaysValue(),
       element.getQualityValue(),
     ];
