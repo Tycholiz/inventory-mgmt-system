@@ -2,60 +2,74 @@
  * Classes
  */
 
-export class FoodItem {
-  name: string;
-  sellIn: number;
-  quality: number;
-  size?: boolean;
+type FoodItemName =
+  | "Cheddar Cheese"
+  | "Instant Ramen"
+  | "Apple"
+  | "Banana"
+  | "Strawberry"
+  | "Organic Avocado";
 
-  constructor(name: string, sellIn: number, quality: number) {
-    this.name = name;
-    this.sellIn = sellIn;
-    this.quality = quality;
-  }
+export class FoodItem {
+  constructor(
+    public name: FoodItemName,
+    public sellIn: number,
+    public quality: number,
+    public isNonPerishable: boolean = false
+  ) // TODO: add ageableItem as a boolean to indicate that the quality increases, rather than decreases over time
+  {}
 }
 
 export class StoreInventory {
-  items: FoodItem[];
+  constructor(public items: FoodItem[]) {}
 
-  constructor(items = [] as FoodItem[]) {
-    this.items = items;
-  }
-
-  updateFoodItemQuality() {
-    for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].name != "Cheddar Cheese") {
-        // if (this.items[i].sellIn < 3) { # Summer sale promotion
-        //     this.items[i].onSale = true;
-        // }
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != "Instant Ramen") {
-            this.items[i].quality = this.items[i].quality - 1;
-          }
-        }
-      } else {
-        // if (this.items[i].sellIn < 3) { # Summer sale promotion
-        //     this.items[i].onSale = true;
-        // }
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1;
-        }
-      }
-      if (this.items[i].name != "Instant Ramen") {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-      }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != "Cheddar Cheese") {
-          this.items[i].quality = this.items[i].quality - this.items[i].quality;
-        } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1;
-          }
-        }
-      }
+  updateFullInventory() {
+    for (const item of this.items) {
+      this.updateFoodItem(item);
     }
 
     return this.items;
+  }
+
+  private updateFoodItem(item: FoodItem) {
+    switch (item.name) {
+      case "Cheddar Cheese":
+        this.updateCheddarCheese(item);
+        break;
+      case "Instant Ramen":
+        this.updateInstantRamen(item);
+        break;
+      default:
+        this.updateDefaultItem(item);
+        break;
+    }
+
+    if (!item.isNonPerishable) {
+      /* food is perishable, so decrement sellIn value */
+      item.sellIn--;
+    }
+  }
+
+  private updateCheddarCheese(item: FoodItem) {
+    if (item.quality < 25) {
+      item.quality++;
+    }
+  }
+
+  private updateInstantRamen(item: FoodItem) {
+    // This method is a no-op, since ramen doesn't decrease in quality and has no sellIn date. Therefore, we might elect to just call nothing in the main switch.
+    // On the other hand, it might be good to keep this method to hook into some kind of logging system
+  }
+
+  private updateDefaultItem(item: FoodItem) {
+    if (item.quality > 0) {
+      item.quality--;
+    }
+
+    if (item.sellIn < 0 && item.quality > 0) {
+      /* sellIn date has passed, so quality decreases twice as fast */
+      item.quality--;
+    }
   }
 }
 
@@ -68,14 +82,14 @@ const items = [
   new FoodItem("Banana", 7, 9),
   new FoodItem("Strawberry", 5, 10),
   new FoodItem("Cheddar Cheese", 10, 16),
-  new FoodItem("Instant Ramen", 0, 5),
+  new FoodItem("Instant Ramen", 0, 5, true),
   // this Organic item does not work properly yet
   new FoodItem("Organic Avocado", 5, 16),
 ];
 
 const storeInventory = new StoreInventory(items);
 
-const DAYS_TO_RUN_REPORT = 10;
+const DAYS_TO_RUN_REPORT = 2;
 
 for (let i = 0; i < DAYS_TO_RUN_REPORT; i++) {
   console.log("Day " + i + "  ---------------------------------");
@@ -86,5 +100,5 @@ for (let i = 0; i < DAYS_TO_RUN_REPORT; i++) {
   console.table(data);
 
   console.log();
-  storeInventory.updateFoodItemQuality();
+  storeInventory.updateFullInventory();
 }
