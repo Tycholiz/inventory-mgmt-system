@@ -1,4 +1,6 @@
-export class FoodItem {
+import { MAX_QUALITY_VALUE, MIN_SELL_IN_VALUE } from "./constants";
+
+export abstract class FoodItem {
   constructor(
     private name: string,
     /**
@@ -14,37 +16,31 @@ export class FoodItem {
     /** indicates a food that retains its quality over time */
     private improvesWithAge: boolean = false
   ) {}
-  public increaseQuality() {
-    if (this.quality < 25) {
-      /* quality cannot be greater than 25 */
-      this.quality++;
-    }
+  public increaseQuality(): void {
+    /* quality cannot be greater than 25 */
+    this.quality = Math.min(this.quality + 1, MAX_QUALITY_VALUE);
   }
-  public decreaseQuality(rate: number = 1) {
-    if (this.quality > 0) {
-      /* quality cannot be negative */
-      this.quality = this.quality - rate;
-    }
+  public decreaseQuality(rate: number = 1): void {
+    /* quality cannot be negative */
+    this.quality = Math.max(this.quality - rate, 0);
   }
-  public decrementSellIn() {
-    if (this.sellIn > -5) {
-      /* quality cannot be less than 5 */
-      this.sellIn--;
-    }
+  public decrementSellIn(): void {
+    /* sellIn cannot be less than -5 */
+    this.sellIn = Math.max(this.sellIn - 1, MIN_SELL_IN_VALUE);
   }
-  public getName() {
+  public getName(): string {
     return this.name;
   }
-  public getSellInDaysValue() {
+  public getSellInDaysValue(): number {
     return this.sellIn;
   }
-  public getQualityValue() {
+  public getQualityValue(): number {
     return this.quality;
   }
-  public isItemNonPerishable() {
+  public isItemNonPerishable(): boolean {
     return this.nonPerishable;
   }
-  public doesItemImproveWithAge() {
+  public doesItemImproveWithAge(): boolean {
     return this.improvesWithAge;
   }
 }
