@@ -13,12 +13,17 @@ type FoodItemName =
 export class FoodItem {
   constructor(
     public name: FoodItemName,
-    private sellIn: number,
     /**
-     * `quality` must be between 0 and 25, and decreases twice as fast when `sellIn` date is less than 0
+     * indicates the remaining number of days that remain before a food item
+     * starts to degrade quality at double speed. When value reaches -5, it must
+     * be discarded.
      */
+    private sellIn: number,
+    /** `quality` must be between 0 and 25, and decreases twice as fast when `sellIn` date is less than 0. Value must be between 0 and 25, inclusive. */
     private quality: number,
+    /** indicates a food that retains its quality over time and does not have a `sellIn` date. */
     public isNonPerishable: boolean = false,
+    /** indicates a food that retains its quality over time */
     public improvesWithAge: boolean = false
   ) {}
   public increaseQuality() {
