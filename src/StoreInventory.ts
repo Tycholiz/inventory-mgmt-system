@@ -3,7 +3,7 @@ import { FoodItem } from "./Foods";
 export class StoreInventory {
   constructor(public items: FoodItem[]) {}
 
-  public updateFullInventory() {
+  public updateFullInventory(): FoodItem[] {
     for (const item of this.items) {
       this.updateFoodItem(item);
     }
@@ -11,7 +11,7 @@ export class StoreInventory {
     return this.items;
   }
 
-  private updateFoodItem(item: FoodItem) {
+  private updateFoodItem(item: FoodItem): void {
     if (item.doesItemImproveWithAge()) {
       item.increaseQuality();
     } else if (!item.doesItemImproveWithAge() && !item.isItemNonPerishable()) {
