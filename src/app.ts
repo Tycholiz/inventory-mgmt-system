@@ -1,90 +1,47 @@
-/**
- * Classes
- */
+import { StoreInventory } from "./StoreInventory";
+import {
+  Apple,
+  CheddarCheese,
+  Banana,
+  Strawberry,
+  InstantRamen,
+} from "./Foods";
 
-export class FoodItem {
-  name: string;
-  sellIn: number;
-  quality: number;
-  size?: boolean;
+const DAYS_TO_RUN_REPORT = Number(process.argv[2]);
+const scriptName = process.env.npm_lifecycle_event;
 
-  constructor(name: string, sellIn: number, quality: number) {
-    this.name = name;
-    this.sellIn = sellIn;
-    this.quality = quality;
-  }
-}
+if (scriptName === "run-report" && !DAYS_TO_RUN_REPORT)
+  /* This check should only be run when generating the report */
+  throw new Error(
+    `
+      Must indicate how many days the report will be run for \n
+      e.g. yarn run-report 4
+    `
+  );
 
-export class StoreInventory {
-  items: FoodItem[];
-
-  constructor(items = [] as FoodItem[]) {
-    this.items = items;
-  }
-
-  updateFoodItemQuality() {
-    for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].name != "Cheddar Cheese") {
-        // if (this.items[i].sellIn < 3) { # Summer sale promotion
-        //     this.items[i].onSale = true;
-        // }
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != "Instant Ramen") {
-            this.items[i].quality = this.items[i].quality - 1;
-          }
-        }
-      } else {
-        // if (this.items[i].sellIn < 3) { # Summer sale promotion
-        //     this.items[i].onSale = true;
-        // }
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1;
-        }
-      }
-      if (this.items[i].name != "Instant Ramen") {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-      }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != "Cheddar Cheese") {
-          this.items[i].quality = this.items[i].quality - this.items[i].quality;
-        } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1;
-          }
-        }
-      }
-    }
-
-    return this.items;
-  }
-}
-
-/**
- * Implementation
- */
-
+/* Implementation */
 const items = [
-  new FoodItem("Apple", 10, 10),
-  new FoodItem("Banana", 7, 9),
-  new FoodItem("Strawberry", 5, 10),
-  new FoodItem("Cheddar Cheese", 10, 16),
-  new FoodItem("Instant Ramen", 0, 5),
-  // this Organic item does not work properly yet
-  new FoodItem("Organic Avocado", 5, 16),
+  new Apple(),
+  new Banana(),
+  new Strawberry(),
+  new CheddarCheese(),
+  new InstantRamen(),
 ];
 
 const storeInventory = new StoreInventory(items);
-
-const DAYS_TO_RUN_REPORT = 10;
 
 for (let i = 0; i < DAYS_TO_RUN_REPORT; i++) {
   console.log("Day " + i + "  ---------------------------------");
   console.log("                  name      sellIn quality");
   const data = items.map((element) => {
-    return [element.name, element.sellIn, element.quality];
+    return [
+      element.getName(),
+      element.getSellInDaysValue(),
+      element.getQualityValue(),
+    ];
   });
   console.table(data);
 
   console.log();
-  storeInventory.updateFoodItemQuality();
+  storeInventory.updateFullInventory();
 }

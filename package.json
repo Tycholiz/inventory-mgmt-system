@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "tsc && node dist/app.js",
+    "run-report": "tsc && node dist/app.js",
     "test": "mocha --require ts-node/register **/*.test.ts",
     "build": "tsc",
     "lint": "eslint . --ext .ts"
