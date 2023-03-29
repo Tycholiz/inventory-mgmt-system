@@ -1,5 +1,8 @@
 const DAYS_TO_RUN_REPORT = Number(process.argv[2]);
-if (!DAYS_TO_RUN_REPORT)
+const scriptName = process.env.npm_lifecycle_event;
+
+if (scriptName === "run-report" && !DAYS_TO_RUN_REPORT)
+  /* This check should only be run when generating the report */
   throw new Error(
     `
       Must indicate how many days the report will be run for \n
