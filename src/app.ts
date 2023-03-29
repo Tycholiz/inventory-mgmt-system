@@ -1,6 +1,11 @@
-/**
- * Classes
- */
+const DAYS_TO_RUN_REPORT = Number(process.argv[2]);
+if (!DAYS_TO_RUN_REPORT)
+  throw new Error(
+    `
+      Must indicate how many days the report will be run for \n
+      e.g. yarn run-report 4
+    `
+  );
 
 type FoodItemName =
   | "Cheddar Cheese"
@@ -90,8 +95,6 @@ const items = [
 ];
 
 const storeInventory = new StoreInventory(items);
-
-const DAYS_TO_RUN_REPORT = 2;
 
 for (let i = 0; i < DAYS_TO_RUN_REPORT; i++) {
   console.log("Day " + i + "  ---------------------------------");
