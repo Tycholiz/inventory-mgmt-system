@@ -73,7 +73,5 @@ describe("StoreInventory", () => {
       expect(ramen1.getQualityValue()).to.equal(originalQuality);
       expect(ramen1.getSellInDaysValue()).to.equal(0);
     });
-    it("should decrease the quality of an item at double speed if the sellIn date is below zero", () => {});
-    it("should remove item from inventory if the sellIn date is -5 or less", () => {});
   });
 });

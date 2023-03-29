@@ -20,7 +20,7 @@ export abstract class FoodItem {
     /* quality cannot be greater than 25 */
     this.quality = Math.min(this.quality + 1, MAX_QUALITY_VALUE);
   }
-  public decreaseQuality(rate: number = 1): void {
+  public decreaseQuality(rate = 1): void {
     /* quality cannot be negative */
     this.quality = Math.max(this.quality - rate, 0);
   }

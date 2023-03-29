@@ -19,7 +19,7 @@ Pretty simple, right? Well this is where it gets interesting:
 - The Quality of an item is never negative
 - The Quality of an item is never more than 25
 - "Cheddar Cheese" actually increases in Quality the older it gets
-- "Instant Ramen", never has to be sold or decreases in Quality (TODO: make this value `null` instead of zero, to indicate that sellIn value is not applicable)
+- "Instant Ramen", never has to be sold or decreases in Quality
 
 We have recently signed a supplier of organic items. This requires an update to our system:
 
