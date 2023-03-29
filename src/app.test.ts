@@ -8,6 +8,6 @@ describe("updateFullInventory", () => {
 
     // Decreases quality
     testInventory.updateFullInventory();
-    expect(testItems[0].sellIn).to.equal(9);
+    expect(testItems[0].getSellInDaysValue()).to.equal(9);
   });
 });

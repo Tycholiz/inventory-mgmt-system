@@ -13,11 +13,37 @@ type FoodItemName =
 export class FoodItem {
   constructor(
     public name: FoodItemName,
-    public sellIn: number,
-    public quality: number,
-    public isNonPerishable: boolean = false
-  ) // TODO: add ageableItem as a boolean to indicate that the quality increases, rather than decreases over time
-  {}
+    private sellIn: number,
+    /**
+     * `quality` must be between 0 and 25, and decreases twice as fast when `sellIn` date is less than 0
+     */
+    private quality: number,
+    public isNonPerishable: boolean = false,
+    public improvesWithAge: boolean = false
+  ) {}
+  public increaseQuality() {
+    if (this.quality < 25) {
+      /* quality cannot be greater than 25 */
+      this.quality++;
+    }
+  }
+  public decreaseQuality() {
+    if (this.quality > 0) {
+      /* quality cannot be negative */
+      this.quality--;
+    }
+  }
+  public decrementSellIn() {
+    if (this.sellIn > -5) {
+      this.sellIn--;
+    }
+  }
+  public getSellInDaysValue() {
+    return this.sellIn;
+  }
+  public getQualityValue() {
+    return this.quality;
+  }
 }
 
 export class StoreInventory {
@@ -32,43 +58,14 @@ export class StoreInventory {
   }
 
   private updateFoodItem(item: FoodItem) {
-    switch (item.name) {
-      case "Cheddar Cheese":
-        this.updateCheddarCheese(item);
-        break;
-      case "Instant Ramen":
-        this.updateInstantRamen(item);
-        break;
-      default:
-        this.updateDefaultItem(item);
-        break;
+    if (item.improvesWithAge) {
+      item.increaseQuality();
+    } else if (!item.improvesWithAge && !item.isNonPerishable) {
+      item.decreaseQuality();
     }
-
     if (!item.isNonPerishable) {
       /* food is perishable, so decrement sellIn value */
-      item.sellIn--;
-    }
-  }
-
-  private updateCheddarCheese(item: FoodItem) {
-    if (item.quality < 25) {
-      item.quality++;
-    }
-  }
-
-  private updateInstantRamen(item: FoodItem) {
-    // This method is a no-op, since ramen doesn't decrease in quality and has no sellIn date. Therefore, we might elect to just call nothing in the main switch.
-    // On the other hand, it might be good to keep this method to hook into some kind of logging system
-  }
-
-  private updateDefaultItem(item: FoodItem) {
-    if (item.quality > 0) {
-      item.quality--;
-    }
-
-    if (item.sellIn < 0 && item.quality > 0) {
-      /* sellIn date has passed, so quality decreases twice as fast */
-      item.quality--;
+      item.decrementSellIn();
     }
   }
 }
@@ -81,7 +78,7 @@ const items = [
   new FoodItem("Apple", 10, 10),
   new FoodItem("Banana", 7, 9),
   new FoodItem("Strawberry", 5, 10),
-  new FoodItem("Cheddar Cheese", 10, 16),
+  new FoodItem("Cheddar Cheese", 10, 16, false, true),
   new FoodItem("Instant Ramen", 0, 5, true),
   // this Organic item does not work properly yet
   new FoodItem("Organic Avocado", 5, 16),
@@ -95,7 +92,11 @@ for (let i = 0; i < DAYS_TO_RUN_REPORT; i++) {
   console.log("Day " + i + "  ---------------------------------");
   console.log("                  name      sellIn quality");
   const data = items.map((element) => {
-    return [element.name, element.sellIn, element.quality];
+    return [
+      element.name,
+      element.getSellInDaysValue(),
+      element.getQualityValue(),
+    ];
   });
   console.table(data);
 
