@@ -1,4 +1,10 @@
 import { FoodItem } from "./Foods";
+import {
+  FoodItemStrategy,
+  NonPerishableFoodItemStrategy,
+  OrganicFoodItemStrategy,
+  PerishableFoodItemStrategy,
+} from "./strategies";
 
 export class StoreInventory {
   constructor(public items: FoodItem[]) {}
@@ -12,14 +18,14 @@ export class StoreInventory {
   }
 
   private updateFoodItem(item: FoodItem): void {
-    if (item.doesItemImproveWithAge()) {
-      item.increaseQuality();
-    } else if (!item.doesItemImproveWithAge() && !item.isItemNonPerishable()) {
-      item.decreaseQuality();
+    let strategy: FoodItemStrategy;
+    if (item.isItemNonPerishable()) {
+      strategy = new NonPerishableFoodItemStrategy();
+    } else if (item.isItemOrganic()) {
+      strategy = new OrganicFoodItemStrategy();
+    } else {
+      strategy = new PerishableFoodItemStrategy();
     }
-    if (!item.isItemNonPerishable()) {
-      /* food is perishable, so decrement sellIn value */
-      item.decrementSellIn();
-    }
+    strategy.update(item);
   }
 }

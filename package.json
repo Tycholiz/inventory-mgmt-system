@@ -6,6 +6,7 @@
   "scripts": {
     "run-report": "tsc && node dist/app.js",
     "test": "mocha --require ts-node/register **/*.test.ts",
+    "test:coverage": "nyc --reporter=text mocha --require ts-node/register **/*.test.ts",
     "build": "tsc",
     "lint": "eslint . --ext .ts"
   },
@@ -20,6 +21,7 @@
     "chai": "^4.3.7",
     "eslint": "^8.36.0",
     "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
     "sinon": "^15.0.3",
     "sinon-chai": "^3.7.0",
     "ts-node": "^10.9.1",

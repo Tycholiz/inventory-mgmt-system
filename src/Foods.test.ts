@@ -11,9 +11,12 @@ describe("FoodItem", () => {
   });
   it("should NOT increase quality if its value is at or above max value allowed", () => {
     const cheese1 = new CheddarCheese();
+
+    /* increase the quality until we reach the max value, then attempt to increase it once more */
     do {
       cheese1.increaseQuality();
     } while (cheese1.getQualityValue() < MAX_QUALITY_VALUE);
+    cheese1.increaseQuality();
 
     expect(cheese1.getQualityValue()).to.equal(MAX_QUALITY_VALUE);
   });
@@ -42,9 +45,12 @@ describe("FoodItem", () => {
   });
   it("should NOT decrease sellIn value of the item if it is at the minimum sellIn value allowed", () => {
     const apple1 = new Apple();
+
+    /* decrease the sellIn value until we reach the min value, then attempt to decrease it once more */
     do {
       apple1.decrementSellIn();
     } while (apple1.getSellInDaysValue() > MIN_SELL_IN_VALUE);
+    apple1.decrementSellIn();
 
     expect(apple1.getSellInDaysValue()).to.equal(MIN_SELL_IN_VALUE);
   });

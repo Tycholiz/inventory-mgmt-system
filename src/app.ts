@@ -5,6 +5,7 @@ import {
   Banana,
   Strawberry,
   InstantRamen,
+  Avocado,
 } from "./Foods";
 
 const DAYS_TO_RUN_REPORT = Number(process.argv[2]);
@@ -26,6 +27,7 @@ const items = [
   new Strawberry(),
   new CheddarCheese(),
   new InstantRamen(),
+  new Avocado(),
 ];
 
 const storeInventory = new StoreInventory(items);

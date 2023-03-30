@@ -1,6 +1,9 @@
 # Node.js
 node_modules/
 
+# nyc code coverage
+.nyc_output/
+
 # Compiled output
 /dist/
 

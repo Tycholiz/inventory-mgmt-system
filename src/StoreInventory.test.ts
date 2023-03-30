@@ -8,6 +8,7 @@ import {
   Banana,
   Strawberry,
   InstantRamen,
+  Avocado,
 } from "./Foods";
 
 describe("StoreInventory", () => {
@@ -42,10 +43,10 @@ describe("StoreInventory", () => {
 
       storeInventory.updateFullInventory();
 
-      // assert that the quality decreased by 1; apples default to 10
+      // assert that the quality decreased by 1
       expect(apple1.getQualityValue()).to.equal(originalQuality - 1);
 
-      // assert that the sellIn decreased by 1; apples default to 10
+      // assert that the sellIn decreased by 1
       expect(apple1.getSellInDaysValue()).to.equal(originalSellIn - 1);
     });
 
@@ -57,7 +58,7 @@ describe("StoreInventory", () => {
 
       storeInventory.updateFullInventory();
 
-      // assert that the quality increased by 1; cheddarCheese defaults at 16
+      // assert that the quality increased by 1
       expect(cheddarCheese1.getQualityValue()).to.equal(originalQuality + 1);
     });
 
@@ -69,9 +70,59 @@ describe("StoreInventory", () => {
 
       storeInventory.updateFullInventory();
 
-      // assert that the quality did not decrease; instant ramen defaults at 5
+      // assert that the quality did not decrease
       expect(ramen1.getQualityValue()).to.equal(originalQuality);
       expect(ramen1.getSellInDaysValue()).to.equal(0);
     });
+
+    it("should decrease the quality of an item twice as fast if the food item is organic", () => {
+      // create an organic food item
+      const avocado1 = new Avocado();
+      const originalQuality = avocado1.getQualityValue();
+      const storeInventory = new StoreInventory([avocado1]);
+
+      storeInventory.updateFullInventory();
+
+      // assert that the quality decreased by 2
+      expect(avocado1.getQualityValue()).to.equal(originalQuality - 2);
+    });
+
+    it("should decrease the quality of an item twice as fast if the sellIn date is at or below zero", () => {
+      const apple1 = new Apple();
+      const storeInventory = new StoreInventory([apple1]);
+
+      /* decrease the sellIn value until we reach zero */
+      do {
+        storeInventory.updateFullInventory();
+        apple1.increaseQuality(); /* force increase the quality for testing purposes */
+      } while (apple1.getSellInDaysValue() > 0);
+
+      const qualityValueWhenSellInEqualsZero = apple1.getQualityValue();
+      /* update inventory now that apple1 has a sellIn value of 0 */
+      storeInventory.updateFullInventory();
+      expect(apple1.getQualityValue()).to.equal(
+        qualityValueWhenSellInEqualsZero - 2
+      );
+    });
+
+    it("should decrease the quality of an item 4x as fast if the food item is both organic and has a sellIn date at or below zero", () => {
+      // create an organic food item
+      const avocado1 = new Avocado();
+      const storeInventory = new StoreInventory([avocado1]);
+
+      /* decrease the sellIn value until we reach zero */
+      do {
+        storeInventory.updateFullInventory();
+        avocado1.increaseQuality(); /* force increase the quality for testing purposes */
+      } while (avocado1.getSellInDaysValue() > 0);
+
+      const qualityValueWhenSellInEqualsZero = avocado1.getQualityValue();
+      /* update inventory now that avocado1 has a sellIn value of 0 */
+      storeInventory.updateFullInventory();
+      expect(avocado1.getQualityValue()).to.equal(
+        qualityValueWhenSellInEqualsZero - 4
+      );
+    });
+
   });
 });
