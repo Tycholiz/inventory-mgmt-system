@@ -4,7 +4,7 @@ import {
   NonPerishableFoodItemStrategy,
   OrganicFoodItemStrategy,
   PerishableFoodItemStrategy,
-} from "./strategies";
+} from "./foodItem.strategies";
 
 export class StoreInventory {
   constructor(public items: FoodItem[]) {}
