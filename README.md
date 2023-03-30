@@ -1,3 +1,14 @@
+### Getting started
+1. run `yarn` to install all dependencies
+2. run `yarn run-report <number-of-days>` to generate the forecasted report
+
+#### Tests
+Tests can be run with
+`yarn test`
+
+With test coverage able to be viewed with
+`yarn test:coverage`
+
 ### Work done
 
 Aside from new features, all of the changes that have been made to this project have been done with the goal of 2 factors: to make the code more declarative (and therefore readable), and to make it more extensible.
