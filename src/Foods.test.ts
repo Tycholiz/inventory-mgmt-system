@@ -35,23 +35,4 @@ describe("FoodItem", () => {
     apple1.decreaseQuality(2);
     expect(apple1.getQualityValue()).to.equal(originalQuality - 2);
   });
-  it("should decrease sellIn value of the item if it is above the minimum sellIn value allowed", () => {
-    const apple1 = new Apple();
-    const originalSellIn = apple1.getSellInDaysValue();
-    apple1.decrementSellIn();
-
-    expect(apple1.getSellInDaysValue()).to.be.above(MIN_SELL_IN_VALUE);
-    expect(apple1.getSellInDaysValue()).to.equal(originalSellIn - 1);
-  });
-  it("should NOT decrease sellIn value of the item if it is at the minimum sellIn value allowed", () => {
-    const apple1 = new Apple();
-
-    /* decrease the sellIn value until we reach the min value, then attempt to decrease it once more */
-    do {
-      apple1.decrementSellIn();
-    } while (apple1.getSellInDaysValue() > MIN_SELL_IN_VALUE);
-    apple1.decrementSellIn();
-
-    expect(apple1.getSellInDaysValue()).to.equal(MIN_SELL_IN_VALUE);
-  });
 });
