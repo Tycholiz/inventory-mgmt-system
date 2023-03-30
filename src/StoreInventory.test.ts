@@ -10,6 +10,7 @@ import {
   InstantRamen,
   Avocado,
 } from "./Foods";
+import { MIN_SELL_IN_VALUE } from "./constants";
 
 describe("StoreInventory", () => {
   describe("updateFullInventory", () => {
@@ -124,5 +125,16 @@ describe("StoreInventory", () => {
       );
     });
 
+    it("should remove item from inventory if the sellIn date is -5 or less", () => {
+      const apple1 = new Apple();
+      const storeInventory = new StoreInventory([apple1]);
+
+      /* decrease the sellIn value until we reach the min value, then attempt to decrease it once more */
+      do {
+        apple1.decrementSellIn(); /* force decrease the sellIn to min value for testing purposes */
+      } while (apple1.getSellInDaysValue() > MIN_SELL_IN_VALUE);
+      storeInventory.updateFullInventory();
+      expect(storeInventory.items.length).to.equal(0);
+    });
   });
 });

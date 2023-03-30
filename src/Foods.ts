@@ -1,3 +1,4 @@
+import { randomUUID, UUID } from "crypto";
 import { MAX_QUALITY_VALUE, MIN_SELL_IN_VALUE } from "./constants";
 
 export abstract class FoodItem {
@@ -16,7 +17,8 @@ export abstract class FoodItem {
     /** indicates a food that increases its quality over time */
     private improvesWithAge: boolean = false,
     /** indicates a food is organic, and thus degrades in quality at twice the normal rate */
-    private isOrganic: boolean = false
+    private isOrganic: boolean = false,
+    public id: UUID = randomUUID()
   ) {}
   public increaseQuality(): void {
     /* quality cannot be greater than 25 */

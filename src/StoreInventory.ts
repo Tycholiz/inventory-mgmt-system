@@ -4,7 +4,9 @@ import {
   NonPerishableFoodItemStrategy,
   OrganicFoodItemStrategy,
   PerishableFoodItemStrategy,
-} from "./strategies";
+} from "./foodItem.strategies";
+import { MIN_SELL_IN_VALUE } from "./constants";
+import { UUID } from "crypto";
 
 export class StoreInventory {
   constructor(public items: FoodItem[]) {}
@@ -12,6 +14,9 @@ export class StoreInventory {
   public updateFullInventory(): FoodItem[] {
     for (const item of this.items) {
       this.updateFoodItem(item);
+      if (item.getSellInDaysValue() <= MIN_SELL_IN_VALUE) {
+        this.removeItemFromInventory(item.id);
+      }
     }
 
     return this.items;
@@ -27,5 +32,11 @@ export class StoreInventory {
       strategy = new PerishableFoodItemStrategy();
     }
     strategy.update(item);
+  }
+
+  private removeItemFromInventory(itemId: UUID) {
+    this.items.forEach((item, index) => {
+      if (item.id === itemId) this.items.splice(index, 1);
+    });
   }
 }
