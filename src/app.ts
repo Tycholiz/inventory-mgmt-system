@@ -7,12 +7,13 @@ import {
   InstantRamen,
   Avocado,
 } from "./Foods";
+import { printInventoryReport } from "./utils";
 
 const DAYS_TO_RUN_REPORT = Number(process.argv[2]);
 const scriptName = process.env.npm_lifecycle_event;
 
 if (scriptName === "run-report" && !DAYS_TO_RUN_REPORT)
-  /* This check should only be run when generating the report */
+  /* This check only run when generating the report */
   throw new Error(
     `
       Must indicate how many days the report will be run for \n
@@ -32,18 +33,4 @@ const items = [
 
 const storeInventory = new StoreInventory(items);
 
-for (let i = 0; i < DAYS_TO_RUN_REPORT; i++) {
-  console.log("Day " + i + "  ---------------------------------");
-  console.log("                  name      sellIn quality");
-  const data = items.map((element) => {
-    return [
-      element.getName(),
-      element.getSellInDaysValue(),
-      element.getQualityValue(),
-    ];
-  });
-  console.table(data);
-
-  console.log();
-  storeInventory.updateFullInventory();
-}
+printInventoryReport(storeInventory, DAYS_TO_RUN_REPORT);
