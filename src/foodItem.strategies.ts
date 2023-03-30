@@ -8,23 +8,21 @@ export class PerishableFoodItemStrategy implements FoodItemStrategy {
   update(item: FoodItem): void {
     if (item.doesItemImproveWithAge()) {
       item.increaseQuality();
-    } else if (item.getSellInDaysValue() <= 0) {
+    } else if (item.isNoLongerFresh()) {
       item.decreaseQuality(2);
     } else {
       item.decreaseQuality();
     }
-    item.decrementSellIn();
   }
 }
 
 export class OrganicFoodItemStrategy implements FoodItemStrategy {
   update(item: FoodItem): void {
-    if (item.getSellInDaysValue() <= 0) {
+    if (item.isNoLongerFresh()) {
       item.decreaseQuality(4);
     } else {
       item.decreaseQuality(2);
     }
-    item.decrementSellIn();
   }
 }
 

@@ -5,7 +5,6 @@ import {
   OrganicFoodItemStrategy,
   PerishableFoodItemStrategy,
 } from "./foodItem.strategies";
-import { MIN_SELL_IN_VALUE } from "./constants";
 import { UUID } from "crypto";
 
 export class StoreInventory {
@@ -14,7 +13,7 @@ export class StoreInventory {
   public updateFullInventory(): FoodItem[] {
     for (const item of this.items) {
       this.updateFoodItem(item);
-      if (item.getSellInDaysValue() <= MIN_SELL_IN_VALUE) {
+      if (item.isSpoiled()) {
         this.removeItemFromInventory(item.id);
       }
     }

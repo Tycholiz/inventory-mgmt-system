@@ -1,15 +1,15 @@
 import { randomUUID, UUID } from "crypto";
-import { MAX_QUALITY_VALUE, MIN_SELL_IN_VALUE } from "./constants";
+import {
+  FRESHNESS_TURNING_POINT,
+  MAX_QUALITY_VALUE,
+  MIN_SELL_IN_VALUE,
+} from "./constants";
 
 export abstract class FoodItem {
   constructor(
     private name: string,
-    /**
-     * indicates the remaining number of days that remain before a food item
-     * starts to degrade quality at double speed. When value reaches -5, it must
-     * be discarded.
-     */
-    private sellIn: number,
+    /** indicates how many days a food item will last for after it has been picked. When this value is at 5 or less, it starts degrading at twice the speed */
+    private lastsDays: number,
     /** `quality` must be between 0 and 25, and decreases twice as fast when `sellIn` date is less than 0. Value must be between 0 and 25, inclusive. */
     private quality: number,
     /** indicates a food that retains its quality over time and does not have a `sellIn` date. */
@@ -18,6 +18,7 @@ export abstract class FoodItem {
     private improvesWithAge: boolean = false,
     /** indicates a food is organic, and thus degrades in quality at twice the normal rate */
     private isOrganic: boolean = false,
+    private pickedAt: Date = new Date(),
     public id: UUID = randomUUID()
   ) {}
   public increaseQuality(): void {
@@ -28,15 +29,25 @@ export abstract class FoodItem {
     /* quality cannot be negative */
     this.quality = Math.max(this.quality - rate, 0);
   }
-  public decrementSellIn(): void {
-    /* sellIn cannot be less than -5 */
-    this.sellIn = Math.max(this.sellIn - 1, MIN_SELL_IN_VALUE);
+  public isSpoiled(): boolean {
+    /* food is spoiled if the current date is `lastDays` past the `pickedAt` date */
+    const currentDate = new Date();
+    const timeDiff = currentDate.getTime() - this.pickedAt.getTime();
+    const daysDiff = timeDiff / (1000 * 3600 * 24);
+    return daysDiff > this.lastsDays;
+  }
+  public isNoLongerFresh(): boolean {
+    /* food is no longer fresh if there are 5 days remaining until it becomes spoiled */
+    const currentDate = new Date();
+    const timeDiff = currentDate.getTime() - this.pickedAt.getTime();
+    const daysDiff = timeDiff / (1000 * 3600 * 24);
+    return daysDiff - FRESHNESS_TURNING_POINT > this.lastsDays;
   }
   public getName(): string {
     return this.name;
   }
-  public getSellInDaysValue(): number {
-    return this.sellIn;
+  public getPickedAtDate(): Date {
+    return this.pickedAt;
   }
   public getQualityValue(): number {
     return this.quality;
@@ -50,40 +61,44 @@ export abstract class FoodItem {
   public isItemOrganic(): boolean {
     return this.isOrganic;
   }
+  public getLastsDays(): number {
+    return this.lastsDays;
+  }
 }
 
 export class Apple extends FoodItem {
   constructor() {
-    super("Apple", 10, 10);
+    super("Apple", 15, 10);
   }
 }
 
 export class Banana extends FoodItem {
   constructor() {
-    super("Banana", 7, 9);
+    super("Banana", 12, 9);
   }
 }
 
 export class Strawberry extends FoodItem {
   constructor() {
-    super("Strawberry", 5, 10);
+    super("Strawberry", 10, 10);
   }
 }
 
 export class CheddarCheese extends FoodItem {
   constructor() {
-    super("Cheddar Cheese", 10, 16, false, true);
+    super("Cheddar Cheese", 15, 16, false, true);
   }
 }
 
 export class InstantRamen extends FoodItem {
   constructor() {
+    // TODO: replace lastsDays with null
     super("Instant Ramen", 0, 5, true);
   }
 }
 
 export class Avocado extends FoodItem {
   constructor() {
-    super("Avocado", 5, 10, false, false, true);
+    super("Avocado", 10, 10, false, false, true);
   }
 }

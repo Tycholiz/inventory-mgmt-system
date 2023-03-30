@@ -34,13 +34,9 @@ const storeInventory = new StoreInventory(items);
 
 for (let i = 0; i < DAYS_TO_RUN_REPORT; i++) {
   console.log("Day " + i + "  ---------------------------------");
-  console.log("                  name      sellIn quality");
+  console.log("                  name      quality");
   const data = items.map((element) => {
-    return [
-      element.getName(),
-      element.getSellInDaysValue(),
-      element.getQualityValue(),
-    ];
+    return [element.getName(), element.getQualityValue()];
   });
   console.table(data);
 
