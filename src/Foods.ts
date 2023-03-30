@@ -13,8 +13,10 @@ export abstract class FoodItem {
     private quality: number,
     /** indicates a food that retains its quality over time and does not have a `sellIn` date. */
     private nonPerishable: boolean = false,
-    /** indicates a food that retains its quality over time */
-    private improvesWithAge: boolean = false
+    /** indicates a food that increases its quality over time */
+    private improvesWithAge: boolean = false,
+    /** indicates a food is organic, and thus degrades in quality at twice the normal rate */
+    private isOrganic: boolean = false
   ) {}
   public increaseQuality(): void {
     /* quality cannot be greater than 25 */
@@ -42,6 +44,9 @@ export abstract class FoodItem {
   }
   public doesItemImproveWithAge(): boolean {
     return this.improvesWithAge;
+  }
+  public isItemOrganic(): boolean {
+    return this.isOrganic;
   }
 }
 
@@ -72,5 +77,11 @@ export class CheddarCheese extends FoodItem {
 export class InstantRamen extends FoodItem {
   constructor() {
     super("Instant Ramen", 0, 5, true);
+  }
+}
+
+export class Avocado extends FoodItem {
+  constructor() {
+    super("Avocado", 5, 10, false, false, true);
   }
 }
