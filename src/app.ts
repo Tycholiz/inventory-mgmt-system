@@ -31,6 +31,7 @@ const items = [
   new Avocado(),
 ];
 
-const storeInventory = new StoreInventory(items);
+const storeInventory = new StoreInventory();
+storeInventory.addMultipleItemsToInventory(items);
 
 printInventoryReport(storeInventory, DAYS_TO_RUN_REPORT);

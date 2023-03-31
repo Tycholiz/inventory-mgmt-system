@@ -5,7 +5,7 @@ export function printInventoryReport(
   daysToRunReport: number
 ) {
   for (let i = 0; i < daysToRunReport; i++) {
-    const itemData = storeInventory.items.map((element) => {
+    const itemData = storeInventory.getAllItems().map((element) => {
       const name = element.getName();
       const sellInDaysValue = element.getSellInDaysValue();
       const qualityValue = element.getQualityValue();

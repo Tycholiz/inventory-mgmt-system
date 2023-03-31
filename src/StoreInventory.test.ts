@@ -16,7 +16,8 @@ describe("StoreInventory", () => {
   describe("updateFullInventory", () => {
     it("should call updateFoodItem for each item in the inventory", () => {
       const foodItems = [new Apple(), new Banana(), new Strawberry()];
-      const storeInventory = new StoreInventory(foodItems);
+      const storeInventory = new StoreInventory();
+      storeInventory.addMultipleItemsToInventory(foodItems);
       const updateFoodItemStub: SinonStub<any[], any> = stub(
         storeInventory as any,
         "updateFoodItem"
@@ -29,7 +30,8 @@ describe("StoreInventory", () => {
 
     it("should return the updated inventory", () => {
       const foodItems = [new Apple(), new Banana(), new Strawberry()];
-      const storeInventory = new StoreInventory(foodItems);
+      const storeInventory = new StoreInventory();
+      storeInventory.addMultipleItemsToInventory(foodItems);
       const result = storeInventory.updateFullInventory();
 
       expect(result).to.deep.equal(foodItems);
@@ -40,8 +42,8 @@ describe("StoreInventory", () => {
       const apple1 = new Apple();
       const originalQuality = apple1.getQualityValue();
       const originalSellIn = apple1.getSellInDaysValue();
-      const storeInventory = new StoreInventory([apple1]);
-
+      const storeInventory = new StoreInventory();
+      storeInventory.addItemToInventory(apple1);
       storeInventory.updateFullInventory();
 
       // assert that the quality decreased by 1
@@ -55,7 +57,8 @@ describe("StoreInventory", () => {
       // create a new food item that improves with age
       const cheddarCheese1 = new CheddarCheese();
       const originalQuality = cheddarCheese1.getQualityValue();
-      const storeInventory = new StoreInventory([cheddarCheese1]);
+      const storeInventory = new StoreInventory();
+      storeInventory.addItemToInventory(cheddarCheese1);
 
       storeInventory.updateFullInventory();
 
@@ -67,7 +70,8 @@ describe("StoreInventory", () => {
       // create a new food item that is non-perishable
       const ramen1 = new InstantRamen();
       const originalQuality = ramen1.getQualityValue();
-      const storeInventory = new StoreInventory([ramen1]);
+      const storeInventory = new StoreInventory();
+      storeInventory.addItemToInventory(ramen1);
 
       storeInventory.updateFullInventory();
 
@@ -80,7 +84,8 @@ describe("StoreInventory", () => {
       // create an organic food item
       const avocado1 = new Avocado();
       const originalQuality = avocado1.getQualityValue();
-      const storeInventory = new StoreInventory([avocado1]);
+      const storeInventory = new StoreInventory();
+      storeInventory.addItemToInventory(avocado1);
 
       storeInventory.updateFullInventory();
 
@@ -90,7 +95,8 @@ describe("StoreInventory", () => {
 
     it("should decrease the quality of an item twice as fast if the sellIn date is at or below zero", () => {
       const apple1 = new Apple();
-      const storeInventory = new StoreInventory([apple1]);
+      const storeInventory = new StoreInventory();
+      storeInventory.addItemToInventory(apple1);
 
       /* decrease the sellIn value until we reach zero */
       do {
@@ -109,7 +115,8 @@ describe("StoreInventory", () => {
     it("should decrease the quality of an item 4x as fast if the food item is both organic and has a sellIn date at or below zero", () => {
       // create an organic food item
       const avocado1 = new Avocado();
-      const storeInventory = new StoreInventory([avocado1]);
+      const storeInventory = new StoreInventory();
+      storeInventory.addItemToInventory(avocado1);
 
       /* decrease the sellIn value until we reach zero */
       do {
@@ -127,14 +134,15 @@ describe("StoreInventory", () => {
 
     it("should remove item from inventory if the sellIn date is -5 or less", () => {
       const apple1 = new Apple();
-      const storeInventory = new StoreInventory([apple1]);
+      const storeInventory = new StoreInventory();
+      storeInventory.addItemToInventory(apple1);
 
       /* decrease the sellIn value until we reach the min value, then attempt to decrease it once more */
       do {
         apple1.decrementSellIn(); /* force decrease the sellIn to min value for testing purposes */
       } while (apple1.getSellInDaysValue() > MIN_SELL_IN_VALUE);
       storeInventory.updateFullInventory();
-      expect(storeInventory.items.length).to.equal(0);
+      expect(storeInventory.getAllItems().length).to.equal(0);
     });
   });
 });
