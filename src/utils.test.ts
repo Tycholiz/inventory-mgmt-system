@@ -17,6 +17,7 @@ chai.use(spies);
 describe("printInventoryReport", () => {
   let storeInventory: StoreInventory;
   let consoleLogSpy: sinon.SinonSpy<any, any>;
+  const consoleLogsPerDay = 3;
 
   beforeEach(() => {
     const items = [
@@ -51,7 +52,6 @@ describe("printInventoryReport", () => {
 
     printInventoryReport(storeInventory, daysToRunReport);
 
-    const consoleLogsPerDay = 3;
     expect(consoleLogSpy.callCount).to.equal(
       daysToRunReport * consoleLogsPerDay
     );

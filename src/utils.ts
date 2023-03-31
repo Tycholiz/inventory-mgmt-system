@@ -9,7 +9,7 @@ export function printInventoryReport(
       const name = element.getName();
       const sellInDaysValue = element.getSellInDaysValue();
       const qualityValue = element.getQualityValue();
-      return [name, sellInDaysValue, qualityValue];
+      return [element.id, name, sellInDaysValue, qualityValue];
     });
     const transformedData = itemData.map(
       ([id, name, sellInDaysValue, quality]) => {
