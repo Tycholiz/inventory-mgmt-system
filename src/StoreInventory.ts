@@ -9,7 +9,6 @@ import { MIN_SELL_IN_VALUE } from "./constants";
 import { UUID } from "crypto";
 
 export class StoreInventory {
-  constructor() {}
   private items: FoodItem[] = [];
 
   public addItemToInventory(foodItem: FoodItem): void {
