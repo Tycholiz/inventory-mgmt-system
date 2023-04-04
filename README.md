@@ -49,7 +49,6 @@ CREATE TABLE inventory (
   current_quantity INT,
   minimum_stock_level INT,
   maximum_stock_level INT,
-  location VARCHAR(255),
   spoilage_date DATE,
   product_id UUID REFERENCES product
 );
