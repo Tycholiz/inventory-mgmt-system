@@ -32,6 +32,30 @@ Our people on the front-line are getting tired of having to adjust the code in `
 
 Forecasting will also be an important part of our inventory management system, so we will add a `soldAt` date on each FoodItem (which will be updated automatically, triggered from the integrated POS system). This will enable us to extract analytics on how long an item stays on store shelves, allowing us to deduce things like averages, demand during peak seasons etc. This data will help us to forecast demand so that we may adequately stock our shelves so customers are not met with lack of supply. With this data we can also make determinations on minimum and maximum stocking quantities for each food item.
 
+#### A note on the database solution
+Due to the relational nature of this inventory management system, I would favor an SQL approach for the data layer. Focusing in on the food items, I see them modelled in the following (rough & simplified) way:
+
+```sql
+CREATE TABLE product (
+  product_id UUID PRIMARY KEY,
+  product_name TEXT,
+  isPerishable BOOLEAN,
+  category_id REFERENCES category,
+);
+
+CREATE TABLE inventory (
+  inventory_id UUID PRIMARY KEY,
+  lot_number TEXT,
+  current_quantity INT,
+  minimum_stock_level INT,
+  maximum_stock_level INT,
+  location VARCHAR(255),
+  spoilage_date DATE,
+  product_id UUID REFERENCES product
+);
+```
+
+each row in the `product` table represents a product that is stocked by the store, and each row in the `inventory` table represents an lot instance of the product. Therefore, each individual food item belongs to a row in the `inventory` table, and therefore the lot that it arrived in. When an item is sold, that sale would have to be tracked in an additional `sales` table, which would reference the particular row in the `inventory` table.
 
 #### Technical changes to be made
 
